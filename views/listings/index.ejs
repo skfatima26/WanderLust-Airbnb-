@@ -1,0 +1,178 @@
+<% layout('/layouts/boilerplate') -%>
+
+<% layout('/layouts/boilerplate') -%>
+
+<style>
+    /* Parent container to hold filters and toggle button */
+    #filters-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 2rem;
+    }
+
+    /* Container for scrollable filters */
+    #filters-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 70%; /* Half width */
+        overflow: hidden;
+    }
+
+    /* Scrollable filter section */
+    .scrolling-filters {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        scroll-behavior: smooth;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .scrolling-filters::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Filter Items */
+    .filter {
+        text-align: center;
+        min-width: 80px;
+        opacity: 0.7;
+        cursor: pointer;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .filter:hover {
+        opacity: 1;
+    }
+
+    .filter p {
+        font-size: 0.8rem;
+        margin: 0;
+    }
+
+    /* Arrow Buttons */
+    .arrow {
+        background: white;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .left-arrow {
+        left: 0px;
+    }
+
+    .right-arrow {
+        right: 0px;
+    }
+
+    /* Tax Toggle Button */
+    .tax-toggle {
+        border: 1px solid black;
+        border-radius: 1rem;
+        height: 2.5rem;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        margin-left: 2rem;
+        margin-top: 1rem;
+    }
+</style>
+
+<!-- Wrapper to hold both filters and tax toggle -->
+<div id="filters-wrapper">
+    <!-- Filter Scrolling Section -->
+    <div id="filters-container">
+        <button class="arrow left-arrow" onclick="scrollFilters(-200)">&#10094;</button>
+
+        <div class="scrolling-filters">
+            <div class="filter"><div class="icon"><i class="fa-solid fa-fire"></i></div><p>Trending</p></div>
+            <div class="filter"><div class="icon"><i class="fa-solid fa-bed"></i></div><p>Rooms</p></div>
+            <div class="filter"><div class="icon"><i class="fa-solid fa-mountain-city"></i></div><p>Iconic Cities</p></div>
+            <div class="filter"><div class="icon"><i class="fa-solid fa-mountain"></i></div><p>Mountain</p></div>
+            <div class="filter"><div class="icon"><i class="fa-solid fa-campground"></i></div><p>Camping</p></div>
+            <div class="filter"><div class="icon"><i class="fa-solid fa-cow"></i></div><p>Farms</p></div>
+            <div class="filter"><div class="icon"><i class="fa-regular fa-snowflake"></i></div><p>Arctic</p></div>
+            <div class="filter"><div class="icon"><i class="fa-solid fa-igloo"></i></div><p>Domes</p></div>
+            <div class="filter"><div class="icon"><i class="fa-solid fa-ship"></i></div><p>Boats</p></div>
+        </div>
+
+        <button class="arrow right-arrow" onclick="scrollFilters(200)">&#10095;</button>
+    </div>
+
+    <!-- Tax Toggle Button -->
+    <div class="tax-toggle">
+        <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+        </div>
+    </div>
+</div>
+
+<script>
+    function scrollFilters(distance) {
+        document.querySelector(".scrolling-filters").scrollBy({ left: distance, behavior: "smooth" });
+    }
+</script>
+
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+
+      <% for(let listing of allListings ){ %>
+          <a href="/listings/<%= listing._id %>" class="listing-link">
+              <div class="card col listing-card">
+                 
+                <img src="<%= listing.image.url %>" class="card-img-top" alt="Hotels image"
+                      style="height:20rem;">
+                  
+                      <div class="card-img-overlay">
+                      <i class="fa-regular fa-heart"></i>
+                  </div>
+                  <div class="card-body">
+                      <p class="card-text">
+                          <b>
+                              <%=listing.title %>
+                          </b> <br>
+                          &#8377;&nbsp;<%= listing.price.toLocaleString("en-IN") %> / night
+                                <i class="tax-info">&nbsp; + 18% GST</i>
+
+                             
+                      </p>
+                  </div>
+              </div>
+          </a>
+          <% } %>
+  </div>
+    <script>
+        let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+        taxSwitch.addEventListener("click", () => {
+            let taxinfo = document.getElementsByClassName("tax-info");
+            for (info of taxinfo) {
+                if (info.style.display != "inline") {
+                    info.style.display = "inline";
+                } else {
+                    info.style.display = "none";
+                }
+
+            }
+        })
+
+
+
+    </script>
